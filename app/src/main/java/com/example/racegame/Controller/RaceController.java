@@ -16,56 +16,32 @@ public class RaceController {
     private final RaceManager model;
     private final RaceActivity view;
 
-    public RaceController(RaceActivity raceActivity, int life, int rows, int columns) {
+    public RaceController(RaceActivity raceActivity, int life, int rows, int columns, String name) {
         this.view = raceActivity;
-        this.model = RaceManager.getInstance(this, life, rows, columns);
+        this.model = RaceManager.getInstance(this, life, rows, columns, name);
     }
 
-    public int getObstacleType(int row, int col){
-        return model.getType(row, col);
-    }
+    public int getObstacleType(int row, int col){ return model.getType(row, col); }
 
-    public void onCoinCrash(){
-        view.coinCrash();
-    }
+    public void onCoinCrash(){ view.coinCrash(); }
 
-    public void onObstacleCrash(){
-        view.obstacleCrash();
-    }
+    public void onObstacleCrash(){ view.obstacleCrash(); }
 
-    public void onLoos(){
-        view.gameLoos();
-    }
+    public void onLoos(){ view.gameEnded(); }
 
-    public void onEnded(){
-        view.gameWin();
-    }
+    public void checkCrash() { model.checkCrashesOccur(); }
 
-    public void checkCrash() {
-        model.checkCrashesOccur();
-    }
+    public int getCrashes() { return model.getCrashes(); }
 
-    public int getCrashes() {
-        return model.getCrashes();
-    }
+    public int getRacerPos() { return model.getRacerPos(); }
 
-    public int getRacerPos() {
-        return model.getRacerPos();
-    }
+    public void moveObstacles() { model.setObstaclesPosition(); }
 
-    public void moveObstacles() {
-        model.setObstaclesPosition();
-    }
+    public void onMoveRight(){ model.moveRacerRight(); }
 
-    public void onMoveRight(){
-        model.moveRacerRight();
-    }
+    public void onMoveLeft(){ model.moveRacerLeft(); }
 
-    public void onMoveLeft(){
-        model.moveRacerLeft();
-    }
+    public int getScores() { return model.getScore(); }
 
-    public void checkState() {
-        model.checkGameState();
-    }
+    public void isGameEnded() { model.checkGameState(); }
 }

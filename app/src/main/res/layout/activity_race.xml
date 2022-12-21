@@ -7,10 +7,32 @@
     tools:context=".View.RaceActivity">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/class_IMG_background"
+        android:id="@+id/game_IMG_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#81C784"/>
+
+
+    <LinearLayout
+        android:layout_width="160dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:elevation="@dimen/cardview_default_radius"
+        android:layout_alignParentStart="true" >
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/game_LBL_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="50sp"
+            android:text="0"
+            android:textStyle="bold"
+           />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="160dp"
@@ -79,14 +101,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:scaleType="fitCenter" />
-
-        </LinearLayout>
-
-        <LinearLayout android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_height="0dp"
-            android:layout_width="match_parent" >
-
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/game_IMG_Obstacle4"
                 android:layout_width="match_parent"
@@ -100,6 +114,14 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"/>
+        </LinearLayout>
+
+        <LinearLayout android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_width="match_parent" >
+
+
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/game_IMG_Obstacle6"
@@ -107,13 +129,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"/>
-
-        </LinearLayout>
-
-        <LinearLayout android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_height="0dp"
-            android:layout_width="match_parent" >
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/game_IMG_Obstacle7"
                 android:layout_width="match_parent"
@@ -135,18 +150,19 @@
                 android:layout_weight="1"
                 android:scaleType="fitCenter" />
 
-        </LinearLayout>
-
-        <LinearLayout android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_height="0dp"
-            android:layout_width="match_parent" >
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/game_IMG_Obstacle10"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:scaleType="fitCenter" />
+
+        </LinearLayout>
+
+        <LinearLayout android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_width="match_parent" >
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/game_IMG_Obstacle11"
@@ -161,13 +177,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:scaleType="fitCenter" />
-
-        </LinearLayout>
-
-        <LinearLayout android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_height="0dp"
-            android:layout_width="match_parent" >
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/game_IMG_Obstacle13"
                 android:layout_width="match_parent"
@@ -216,13 +225,6 @@
                 android:layout_weight="1"
                 android:scaleType="fitCenter" />
 
-        </LinearLayout>
-
-        <LinearLayout android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_height="0dp"
-            android:layout_width="match_parent" >
-
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/game_IMG_Obstacle19"
                 android:layout_width="match_parent"
@@ -237,12 +239,6 @@
                 android:layout_weight="1"
                 android:scaleType="fitCenter" />
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/game_IMG_Obstacle21"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
         </LinearLayout>
 
         <LinearLayout android:orientation="horizontal"
@@ -250,6 +246,12 @@
             android:layout_height="0dp"
             android:layout_width="match_parent" >
 
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle21"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/game_IMG_Obstacle22"
                 android:layout_width="match_parent"
@@ -271,9 +273,173 @@
                 android:layout_weight="1"
                 android:scaleType="fitCenter" />
 
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle25"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+        </LinearLayout>
+
+        <LinearLayout android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_width="match_parent" >
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle26"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle27"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle28"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle29"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle30"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+
+        </LinearLayout>
+
+        <LinearLayout android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_width="match_parent" >
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle31"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle32"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle33"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle34"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle35"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+
+        </LinearLayout>
+
+        <LinearLayout android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_width="match_parent" >
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle36"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle37"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle38"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle39"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle40"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+        </LinearLayout>
+
+        <LinearLayout android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_width="match_parent" >
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle41"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle42"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle43"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle44"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/game_IMG_Obstacle45"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="fitCenter" />
         </LinearLayout>
 
     </LinearLayout>
+
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/game_FAB_left"
@@ -298,14 +464,5 @@
         android:backgroundTint="@color/purple_200"
         app:icon="@drawable/arrow_circle_right"
         app:iconSize="50dp" />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/game_BTN_start"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:layout_centerInParent="true"
-        android:textSize="25sp"
-        android:backgroundTint="@color/purple_200" />
 
 </RelativeLayout>

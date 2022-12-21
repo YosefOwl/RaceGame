@@ -1,6 +1,9 @@
 package com.example.racegame.Model;
 
+import android.util.Log;
+
 import com.example.racegame.Controller.RaceController;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -21,16 +24,14 @@ public class RaceManager {
      * @param life-int
      * @param rows-int
      * @param columns-int
+     * @param racerName-String
      */
 
-    private RaceManager(RaceController controller, int life, int rows, int columns) {
+    private RaceManager(RaceController controller, int life, int rows, int columns, String racerName) {
         this.life = life;
         this.controller = controller;
         obstaclesState = new int[rows][columns];
-        this.racer = new StudentRacer()
-                .setPosition(columns / 2)
-                .setName("")
-                .setScore(0);
+        this.racer = new StudentRacer().setPosition(columns / 2).setName(racerName).setScore(0);
     }
 
     /**
@@ -39,12 +40,13 @@ public class RaceManager {
      * @param life-int
      * @param rows-int
      * @param columns-int
+     * @param racerName-String
      * @return GameManager
      */
-    public static RaceManager getInstance(RaceController controller, int life, int rows, int columns) {
+    public static RaceManager getInstance(RaceController controller, int life, int rows,
+                                          int columns, String racerName) {
         if (gameManager == null)
-            gameManager =  new RaceManager(controller, life, rows, columns);
-
+            gameManager =  new RaceManager(controller, life, rows, columns, racerName);
         return gameManager;
     }
 
@@ -59,18 +61,19 @@ public class RaceManager {
         // zero first row before fill with rand value
         Arrays.fill(obstaclesState[0], 0);
 
-        // for 1 row space between obstacles, loop check the next row for that.
+        // 1 row space between obstacles, loop check the next row for that.
         for (int i = 0; i < obstaclesState[0].length; i++) {
             if (obstaclesState[1][i] == 1)
                 return;
         }
+
         bound =  obstaclesState[0].length;
 
         // set at obstacles (for now only 1=exam or 0=empty ) and position by rand
         // obstacles roll at most  firstObstacleRow.length - 1, possibility to escape
         for (int j = 0; j < obstaclesState[0].length -1 ; j++) {
             roadPos = rand.nextInt(bound);
-            obstacle = rand.nextInt(bound-1);
+            obstacle = rand.nextInt(bound);
             obstaclesState[0][roadPos] = obstacle;
         }
     }
@@ -99,16 +102,17 @@ public class RaceManager {
      * if so call to controller and set a value (crashes++ \ set new score)
      */
     public void  checkCrashesOccur() {
-        // isCoinCrash() part do nothing now , next episode
+
         if (isCoinCrash()) {
-            racer.setScore(racer.getScore() + 1);
+
             obstaclesState[obstaclesState.length - 2][racer.getPosition()] = 0;
+            racer.setScore(racer.getScore() + 1);
             controller.onCoinCrash();
         }
 
         if (isObstacleCrash()) {
-            crashes++;
             obstaclesState[obstaclesState.length - 2][racer.getPosition()] = 0;
+            crashes++;
             controller.onObstacleCrash();
         }
     }
@@ -164,27 +168,13 @@ public class RaceManager {
      * getCrashes method
      * @return crashes-int
      */
-    public int getCrashes() {return crashes; }
-
-    //region Description : methods not using or doing nothing for now, for next episode
+    public int getCrashes() { return crashes; }
 
     /**
      * isLose methode return true if racer loos all life
      * @return boolean
      */
-    public boolean isLose(){
-        return life == crashes;
-    }
-
-    /**
-     * isGameEnded method return true if racer get max score
-     * @return boolean
-     */
-    //may not necessary
-    public boolean isGameEnded(){
-        // TODO: 100 (max score ) shall be a const
-        return racer.getScore() == 100;
-    }
+    public boolean isLose(){ return life == crashes; }
 
     /**
      * isCoinCrash method return true if racer crash on coin.
@@ -197,20 +187,19 @@ public class RaceManager {
     }
 
     /**
-     * checkGameState method check if has loos or game ended
-     * if so call to controller
+     * checkGameState method TODO
      */
     public void  checkGameState() {
-        // TODO: complete next Exercise
+
         if (isLose()) {
-            // do something
+            // TODO:  get location
+            racer.setLoseLocation(new LatLng(0.0, 5.5));
             controller.onLoos();
         }
-
-        if (isObstacleCrash()) {
-            // do something
-            controller.onEnded();
-        }
     }
-    //endregion
+
+    //TODO
+    public int getScore() {
+        return racer.getScore();
+    }
 }

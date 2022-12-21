@@ -1,6 +1,9 @@
 package com.example.racegame.View;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,10 +14,12 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.bumptech.glide.Glide;
 import com.example.racegame.Controller.RaceController;
 import com.example.racegame.R;
+import com.example.racegame.Utils.BackgroundSound;
 import com.example.racegame.Utils.SignalUser;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,24 +37,31 @@ import java.util.TimerTask;
 
 public class RaceActivity extends AppCompatActivity {
 
-    final static int VIBRATE_TIME_IN_MS = 200;
-    final static int SPEED_IN_MS = 750;
-    final static String TOAST_MSG = " Bad Exam!! ";
+    public static final String KEY_SPEED = "KEY_SPEED";
+    public static final String KEY_CONTROL = "KEY_CONTROL";
 
+    private final int VIBRATE_TIME_IN_MS = 200;
+
+    final private int EMPTY_OBS = 0;//TODO
+    final private int EXAM_OBS = 1;
+    final private int COIN_OBS = 2;
+
+    final private String TOAST_MSG = " Bad Exam!! ";
 
     // View objects in activity main.
     private AppCompatImageView backgroundIMG;
-    private MaterialButton btnStart;
+    //private MaterialButton btnStart; // TODO may need for continue option
     private ExtendedFloatingActionButton btnFABRight;
     private ExtendedFloatingActionButton btnFABLeft;
+    private MaterialTextView scoreLBL;
 
     // screenImgObj matrix represent all entity's that displayed on screen
     // the racer-student, the obstacles and coins.
     private ShapeableImageView[][] screenImgObj;
     private ShapeableImageView[] heartsIMG;
 
-    boolean startGame = false;
     private int gameSpeed;
+    private boolean controlFlag;
 
     // use timer for obstacles movement.
     private Timer timer;
@@ -58,9 +70,13 @@ public class RaceActivity extends AppCompatActivity {
     // signal the user on fail in game.
     private SignalUser signal;
 
+    //TODO
+    private Intent soundIntent;
+    private Intent menuIntent;
+    private Intent recordIntent;
+
     /**
-     * onCreate method set the activity_game init view obj, Timer,
-     * GameController, and NotificationSignal.
+     * onCreate method set the activity_game init ..... TODO
      * @param savedInstanceState-Bundle
      */
     @Override
@@ -71,65 +87,70 @@ public class RaceActivity extends AppCompatActivity {
         findViews();
         initBackground();
         initButtons();
-        gameSpeed = SPEED_IN_MS;
+
+        initIntents();
+
         signal = SignalUser.getInstance(this);
-        timer = new Timer();
         controller = new RaceController(this, heartsIMG.length,
-                screenImgObj.length, screenImgObj[0].length);
+                screenImgObj.length, screenImgObj[0].length, "Yosef"); //TODO name
 
-        updateRacerUI(screenImgObj[screenImgObj.length - 2][controller.getRacerPos()]);
+        updateRacerUI();
+
+        startGame();
     }
 
-    /**
-     * onStop Override method stop the timer
-     */
-    @Override
-    protected void onStop() {
-        super.onStop();
-        timer.cancel();
+    //TODO
+    private void initIntents() {
+        menuIntent = getIntent();
+        gameSpeed = menuIntent.getIntExtra(KEY_SPEED, MenuActivity.LOW_SPEED_MS);
+        controlFlag = menuIntent.getBooleanExtra(KEY_CONTROL, false);
+
+        soundIntent = new Intent(RaceActivity.this, BackgroundSound.class);
+
+        recordIntent = new Intent(RaceActivity.this, RecordActivity.class);
     }
 
+
     /**
-     * onResume Override method init new timer
-     * and init buttons.
+     * onResume Override method TODO
      */
     @Override
     protected void onResume() {
         super.onResume();
-        if (startGame)
-            btnStart.setText("CONTINUE");
 
-        btnStart.setVisibility(View.VISIBLE);
-        btnFABLeft.setEnabled(false);
-        btnFABRight.setEnabled(false);
-        timer = new Timer();
+        playBackgroundSound();
+        startGame();
     }
 
     /**
-     * onPause method do nothing right now
+     * onPause method TODO
      */
     @Override
     protected void onPause() {
         super.onPause();
+
+        timer.cancel();
+        stopService(soundIntent);
+
         // TODO: save data to SharePreferences
     }
 
     /**
      * startGame methode run runOnUiThread in schedule timer.
      * Time delay determine the speed of obstacles on screen.
-     * in runOnUiThread calling  moveObstacles(); and updateUI(); methods.
+     * in runOnUiThread calling  moveObstacles() updateUI() and checkCrash() methods.
      */
     private void startGame() {
-        btnStart.setVisibility(View.GONE);
-        btnFABLeft.setEnabled(true);
-        btnFABRight.setEnabled(true);
-        startGame = true;
+        timer = new Timer();
+
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 runOnUiThread(() -> {
                     controller.moveObstacles();
                     updateUI();
+                    controller.checkCrash();        // check coin or exam crashes
+                    controller.isGameEnded();    // check if game ended
                 });
             }
         }, gameSpeed,gameSpeed);
@@ -143,20 +164,18 @@ public class RaceActivity extends AppCompatActivity {
      */
     private void updateUI() {
         int obstacleType;
-        controller.checkCrash();     // check coin or exam crashes
 
         for (int i = 0; i < screenImgObj.length; i++) {
             for (int j = 0; j < screenImgObj[0].length; j++) {
                 obstacleType = controller.getObstacleType(i, j);
-                Log.d("TYPE", "screenImgObj[i][j]" +"["+i+"]"+"["+j+"] --> "+"type" + obstacleType);
+
                 if (i == screenImgObj.length - 2 && j == controller.getRacerPos()) {
-                    updateRacerUI(screenImgObj[i][j]);
+                    updateRacerUI();
                 } else {
                     updateObstacleUI(screenImgObj[i][j], obstacleType);
                 }
             }
         }
-        // for next episode : controller.checkState(); // check game ended or loos
     }
 
     /**
@@ -165,20 +184,29 @@ public class RaceActivity extends AppCompatActivity {
      * @param obstacleType-int, 1 = exam obstacle type, 2=coin obstacle type.
      */
     private void updateObstacleUI(ShapeableImageView imageView, int obstacleType) {
-        imageView.setImageResource(R.drawable.exam);
 
-        // TODO: in next exercise should set if for obstacle type.
-        if (obstacleType != 0)
-            imageView.setVisibility(View.VISIBLE);
-        else
+        if (obstacleType == 0) {
             imageView.setVisibility(View.INVISIBLE);
+            return;
+        }
+
+        if (obstacleType == EXAM_OBS) {
+            imageView.setImageResource(R.drawable.exam);
+        }
+
+        if (obstacleType == COIN_OBS)
+            imageView.setImageResource(R.drawable.grade);
+
+        imageView.setVisibility(View.VISIBLE);
     }
 
     /**
      * methode updateRacerUI set resource and visibility of racer.
-     * @param imageView-ShapeableImageView
      */
-    private void updateRacerUI(ShapeableImageView imageView) {
+    private void updateRacerUI() {
+        ShapeableImageView imageView;
+
+        imageView = screenImgObj[screenImgObj.length-2][controller.getRacerPos()];
         imageView.setImageResource(R.drawable.student);
         imageView.setVisibility(View.VISIBLE);
     }
@@ -187,20 +215,27 @@ public class RaceActivity extends AppCompatActivity {
      * obstacleCrash methode display toast msg and vibrate.
      */
     public void obstacleCrash() {
+
         signal.toast(TOAST_MSG);
         signal.vibrate(VIBRATE_TIME_IN_MS);
 
         if (controller.getCrashes() <= heartsIMG.length)
             heartsIMG[heartsIMG.length - controller.getCrashes()].setVisibility(View.INVISIBLE);
+
+        signal.playSound(this, R.raw.examcrashsound);
     }
+
+
 
     /**
      * leftClicked methode update controller on clicked left button
      * and call updateUI.
      */
     private void leftClicked() {
+        screenImgObj[screenImgObj.length-2][controller.getRacerPos()].setImageResource(0);
+        //screenImgObj[screenImgObj.length-2][controller.getRacerPos()].setVisibility(View.INVISIBLE);
         controller.onMoveLeft();
-        updateUI();
+        updateRacerUI();
     }
 
     /**
@@ -208,8 +243,12 @@ public class RaceActivity extends AppCompatActivity {
      * and call updateUI.
      */
     private void rightClicked() {
+        screenImgObj[screenImgObj.length-2][controller.getRacerPos()].setImageResource(0);
+
+//        screenImgObj[screenImgObj.length-2][controller.getRacerPos()].setVisibility(View.INVISIBLE);
         controller.onMoveRight();
-        updateUI();
+        updateRacerUI();
+
     }
 
     /**
@@ -230,21 +269,36 @@ public class RaceActivity extends AppCompatActivity {
      */
     private void findViews() {
 
-        backgroundIMG = findViewById(R.id.class_IMG_background);
+        backgroundIMG = findViewById(R.id.game_IMG_background);
 
+        scoreLBL = findViewById(R.id.game_LBL_score);
         btnFABLeft = findViewById(R.id.game_FAB_left);
         btnFABRight = findViewById(R.id.game_FAB_right);
-        btnStart = findViewById(R.id.game_BTN_start);
+
 
         screenImgObj = new ShapeableImageView[][]{
-                {findViewById(R.id.game_IMG_Obstacle1), findViewById(R.id.game_IMG_Obstacle2), findViewById(R.id.game_IMG_Obstacle3)},
-                {findViewById(R.id.game_IMG_Obstacle4), findViewById(R.id.game_IMG_Obstacle5), findViewById(R.id.game_IMG_Obstacle6)},
-                {findViewById(R.id.game_IMG_Obstacle7), findViewById(R.id.game_IMG_Obstacle8), findViewById(R.id.game_IMG_Obstacle9)},
-                {findViewById(R.id.game_IMG_Obstacle10), findViewById(R.id.game_IMG_Obstacle11), findViewById(R.id.game_IMG_Obstacle12)},
-                {findViewById(R.id.game_IMG_Obstacle13), findViewById(R.id.game_IMG_Obstacle14), findViewById(R.id.game_IMG_Obstacle15)},
-                {findViewById(R.id.game_IMG_Obstacle16), findViewById(R.id.game_IMG_Obstacle17), findViewById(R.id.game_IMG_Obstacle18)},
-                {findViewById(R.id.game_IMG_Obstacle19), findViewById(R.id.game_IMG_Obstacle20), findViewById(R.id.game_IMG_Obstacle21)},
-                {findViewById(R.id.game_IMG_Obstacle22), findViewById(R.id.game_IMG_Obstacle23), findViewById(R.id.game_IMG_Obstacle24)}
+                {findViewById(R.id.game_IMG_Obstacle1), findViewById(R.id.game_IMG_Obstacle2), findViewById(R.id.game_IMG_Obstacle3),
+                 findViewById(R.id.game_IMG_Obstacle4), findViewById(R.id.game_IMG_Obstacle5)},
+
+                {findViewById(R.id.game_IMG_Obstacle6), findViewById(R.id.game_IMG_Obstacle7), findViewById(R.id.game_IMG_Obstacle8),
+                 findViewById(R.id.game_IMG_Obstacle9) , findViewById(R.id.game_IMG_Obstacle10)},
+
+                {findViewById(R.id.game_IMG_Obstacle11), findViewById(R.id.game_IMG_Obstacle12),
+                 findViewById(R.id.game_IMG_Obstacle13), findViewById(R.id.game_IMG_Obstacle14), findViewById(R.id.game_IMG_Obstacle15)},
+
+                {findViewById(R.id.game_IMG_Obstacle16), findViewById(R.id.game_IMG_Obstacle17), findViewById(R.id.game_IMG_Obstacle18),
+                findViewById(R.id.game_IMG_Obstacle19), findViewById(R.id.game_IMG_Obstacle20)},
+
+                {findViewById(R.id.game_IMG_Obstacle21), findViewById(R.id.game_IMG_Obstacle22), findViewById(R.id.game_IMG_Obstacle23),
+                        findViewById(R.id.game_IMG_Obstacle24), findViewById(R.id.game_IMG_Obstacle25)},
+                {findViewById(R.id.game_IMG_Obstacle26), findViewById(R.id.game_IMG_Obstacle27), findViewById(R.id.game_IMG_Obstacle28),
+                        findViewById(R.id.game_IMG_Obstacle29), findViewById(R.id.game_IMG_Obstacle30)},
+                {findViewById(R.id.game_IMG_Obstacle31), findViewById(R.id.game_IMG_Obstacle32), findViewById(R.id.game_IMG_Obstacle33),
+                        findViewById(R.id.game_IMG_Obstacle34), findViewById(R.id.game_IMG_Obstacle35)},
+                {findViewById(R.id.game_IMG_Obstacle36), findViewById(R.id.game_IMG_Obstacle37), findViewById(R.id.game_IMG_Obstacle38),
+                        findViewById(R.id.game_IMG_Obstacle39), findViewById(R.id.game_IMG_Obstacle40)},
+                {findViewById(R.id.game_IMG_Obstacle41), findViewById(R.id.game_IMG_Obstacle42), findViewById(R.id.game_IMG_Obstacle43),
+                        findViewById(R.id.game_IMG_Obstacle44), findViewById(R.id.game_IMG_Obstacle45)}
         };
 
         heartsIMG = new ShapeableImageView[]{
@@ -258,45 +312,40 @@ public class RaceActivity extends AppCompatActivity {
      * initButtons methode init setOnClickListener for entire buttons.
      */
     private void initButtons() {
-
         btnFABLeft.setOnClickListener(view -> leftClicked());
         btnFABRight.setOnClickListener(view -> rightClicked());
-        btnStart.setOnClickListener(view -> startGame());
-        btnStart.setText("START");
-        btnFABLeft.setEnabled(false);
-        btnFABRight.setEnabled(false);
     }
 
-    //region Description : methods not using for now, for next episode
+
     /**
      * coinCrash methode
      */
     public void coinCrash() {
-        // TODO:
+        scoreLBL.setText("" + controller.getScores());
+        signal.playSound(this, R.raw.coincrashsound);
     }
 
-    /**
-     * stopGame methode
-     */
-    public void stopGame(){
-        // TODO:
+
+    // TODO
+    public void playBackgroundSound() {
+        startService(soundIntent);
     }
 
-    /**
-     * gameLoos methode
-     */
-    public void gameLoos() {
-        stopGame();
-        // TODO:
-    }
+    protected LocationManager locationManager;
+    // TODO
+    public void gameEnded() {
 
-    /**
-     * gameWin methode
-     */
-    public void gameWin(){
-        stopGame();
-        // TODO:
+
+        //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+        // gameOver();  TODO: display screen of GameOver
+        // TODO: load data from SharePreferences
+        // TODO: send data to recordACTIVITY
+        timer.cancel();
+        stopService(soundIntent);
+        startActivity(recordIntent);
+        finish();
     }
-    //endregion
 
 }

@@ -1,13 +1,16 @@
 package com.example.racegame.Model;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * class StudentRacer contain the racer info.
  * Racer build as Builder design pattern.
  */
 public class StudentRacer {
-    private String name; // for future
-    private int score;   // for future
+    private String name;
+    private int score;
     private int position;
+    private LatLng loseLocation;
 
     /**
      * empty Racer constructor
@@ -65,6 +68,24 @@ public class StudentRacer {
      */
     public StudentRacer setPosition(int position) {
         this.position = position;
+        return this;
+    }
+
+    /**
+     * getLoseLocation methode
+     * @return loseLocation-LatLng
+     */
+    public LatLng getLoseLocation() {
+        return loseLocation;
+    }
+
+    /**
+     * setLoseLocation method
+     * @param loseLocation-LatLng
+     * @return this Racer
+     */
+    public StudentRacer setLoseLocation(LatLng loseLocation) {
+        this.loseLocation = loseLocation;
         return this;
     }
 }

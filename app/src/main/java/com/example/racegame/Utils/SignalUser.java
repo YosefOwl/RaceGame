@@ -1,6 +1,7 @@
 package com.example.racegame.Utils;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -49,8 +50,15 @@ public class SignalUser {
      */
     public void vibrate(int vibrateTime) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            vibrator.vibrate(VibrationEffect.createOneShot(vibrateTime, VibrationEffect.DEFAULT_AMPLITUDE));
+            vibrator.vibrate(VibrationEffect.createOneShot(vibrateTime,
+                    VibrationEffect.DEFAULT_AMPLITUDE));
         else
             vibrator.vibrate(vibrateTime);
+    }
+
+    public void playSound(Context context, int soundID) {
+        MediaPlayer player = MediaPlayer.create(context, soundID);
+        player.setVolume(110, 110);
+        player.start();
     }
 }
