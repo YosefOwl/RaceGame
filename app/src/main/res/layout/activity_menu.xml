@@ -13,50 +13,73 @@
         android:layout_height="match_parent"
         android:background="#81C784" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/menu_BTN_start"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:layout_centerInParent="true"
-        android:backgroundTint="@color/purple_200"
-        android:text="Play Game"
-        android:textSize="25sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/menu_BTN_records"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:layout_below="@id/menu_BTN_start"
-        android:layout_centerInParent="true"
-        android:backgroundTint="@color/purple_200"
-        android:text="Records"
-        android:textSize="25sp" />
-
-
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/menu_SWBTN_speed"
+
         android:layout_width="400dp"
-        android:layout_height="80dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="25dp"
+
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="100dp"
-        android:text="Speed :"
-        android:textOff="Low"
-        android:textOn="High"
-        android:background="@color/purple_200"/>
+        android:backgroundTint="@color/purple_200"
+        android:text="@string/menu_SWBTN_speed"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="18sp" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/menu_SWBTN_control"
         android:layout_width="400dp"
-        android:layout_height="80dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
+        android:layout_height="60dp"
+        android:layout_below="@+id/menu_SWBTN_speed"
+        android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:text="Move control : Buttons / Motion"
-        android:background="@color/purple_200"/>
+        android:backgroundTint="@color/purple_200"
+        android:text="@string/menu_SWBTN_control"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/menu_BTN_start"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_centerInParent="true"
+        android:backgroundTint="@color/purple_200"
+        android:text="@string/menu_BTN_start"
+        android:textSize="25sp" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/menu_TXTV_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/menu_BTN_start"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/purple_200"
+        android:hint="@string/menu_hint_edit_TXT_name"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="26sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/menu_BTN_records"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/purple_200"
+        android:text="@string/menu_BTN_records"
+        android:textSize="25sp" />
 
 </RelativeLayout>

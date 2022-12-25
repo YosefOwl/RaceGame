@@ -1,19 +1,21 @@
 package com.example.racegame.Model;
 
-import android.util.Log;
-
 import com.example.racegame.Controller.RaceController;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * class RaceManager is a BL in this game
+ */
 public class RaceManager {
 
-    private static  RaceManager gameManager = null;
+    private static  RaceManager instance = null;
 
     private int[][] obstaclesState; // represent all types of obstacles, 0=empty, 1=exam, 2=coin
-    private final StudentRacer racer;
+    private StudentRacer racer;
+    private int racerPosition;
     private int crashes = 0;
     private final int life;
     private final RaceController controller;
@@ -24,30 +26,33 @@ public class RaceManager {
      * @param life-int
      * @param rows-int
      * @param columns-int
-     * @param racerName-String
      */
-
-    private RaceManager(RaceController controller, int life, int rows, int columns, String racerName) {
+    private RaceManager(RaceController controller, int life, int rows, int columns) {
         this.life = life;
         this.controller = controller;
         obstaclesState = new int[rows][columns];
-        this.racer = new StudentRacer().setPosition(columns / 2).setName(racerName).setScore(0);
+        racerPosition = columns / 2 ;
     }
 
     /**
-     * getInstance static method , implement singleton design pattern
+     * initInstance static method , initiate instance as singleton design pattern
      * @param controller-GameController
      * @param life-int
      * @param rows-int
      * @param columns-int
-     * @param racerName-String
-     * @return GameManager
      */
-    public static RaceManager getInstance(RaceController controller, int life, int rows,
-                                          int columns, String racerName) {
-        if (gameManager == null)
-            gameManager =  new RaceManager(controller, life, rows, columns, racerName);
-        return gameManager;
+    public static void initInstance(RaceController controller, int life, int rows, int columns) {
+        if (instance == null)
+            instance =  new RaceManager(controller, life, rows, columns);
+    }
+
+
+    /**
+     * getInstance method return instance
+     * @return instance-RaceManager
+     */
+    public static RaceManager getInstance(){
+        return instance;
     }
 
     /**
@@ -103,17 +108,15 @@ public class RaceManager {
      */
     public void  checkCrashesOccur() {
 
-        if (isCoinCrash()) {
-
-            obstaclesState[obstaclesState.length - 2][racer.getPosition()] = 0;
-            racer.setScore(racer.getScore() + 1);
-            controller.onCoinCrash();
-        }
-
         if (isObstacleCrash()) {
-            obstaclesState[obstaclesState.length - 2][racer.getPosition()] = 0;
+            obstaclesState[obstaclesState.length - 2][racerPosition] = 0;
             crashes++;
             controller.onObstacleCrash();
+        }
+        else if (isCoinCrash()) {
+            obstaclesState[obstaclesState.length - 2][racerPosition] = 0;
+            racer.setScore(racer.getScore() + 1);
+            controller.onCoinCrash();
         }
     }
 
@@ -136,7 +139,7 @@ public class RaceManager {
      */
     public boolean isObstacleCrash() {
         // obstaclesState[obstaclesState.length - 2] is 1 line before bottom
-        return (obstaclesState[obstaclesState.length - 2][racer.getPosition()] == 1);
+        return obstaclesState[obstaclesState.length - 2][racerPosition] == 1;
     }
 
 
@@ -145,8 +148,8 @@ public class RaceManager {
      * on move right
      */
     public void moveRacerRight() {
-        if (racer.getPosition() < obstaclesState[0].length - 1)
-            racer.setPosition(racer.getPosition() + 1);
+        if (racerPosition < obstaclesState[0].length - 1)
+            racerPosition++;
     }
 
     /**
@@ -154,15 +157,15 @@ public class RaceManager {
      * on move left
      */
     public void moveRacerLeft() {
-        if (racer.getPosition() > 0)
-            racer.setPosition(racer.getPosition() - 1);
+        if (racerPosition > 0)
+            racerPosition--;
     }
 
     /**
      * getRacerPos method
      * @return racerPosition-int
      */
-    public int getRacerPos() { return racer.getPosition(); }
+    public int getRacerPos() { return racerPosition; }
 
     /**
      * getCrashes method
@@ -183,23 +186,53 @@ public class RaceManager {
      */
     public boolean isCoinCrash() {
         // obstaclesState[obstaclesState.length - 2] is 1 line from bottom
-        return obstaclesState[obstaclesState.length - 2][racer.getPosition()] == 2;
+        return obstaclesState[obstaclesState.length - 2][racerPosition] == 2;
     }
 
     /**
-     * checkGameState method TODO
+     * checkGameState method check if game ended and call to controller
      */
     public void  checkGameState() {
-
         if (isLose()) {
-            // TODO:  get location
-            racer.setLoseLocation(new LatLng(0.0, 5.5));
-            controller.onLoos();
+            controller.endGame();
+            crashes = 0;
+            obstaclesState = new int[obstaclesState.length][obstaclesState[0].length];
+            racerPosition = obstaclesState[0].length / 2;
         }
     }
 
-    //TODO
+    /**
+     * gameEnded method call when game is ended and got a location loose
+     * method set the racer location and call to onLoos() via controller
+     * @param latLng-LatLng
+     */
+    public void gameEnded (LatLng latLng){
+        racer.setLooseLocation(latLng);
+        controller.onLoos();
+    }
+
+    /**
+     * getRacer method
+     * @return racer-StudentRacer
+     */
+    public StudentRacer getRacer(){
+        return racer;
+    }
+
+    /**
+     * getScore method
+     * @return racerScore-int
+     */
     public int getScore() {
         return racer.getScore();
     }
+
+    /**
+     * setRacer method used for new game (singleton issue )
+     * @param name-String
+     */
+    public void setRacer(String name) {
+        racer = new StudentRacer().setName(name).setScore(0);
+    }
+
 }

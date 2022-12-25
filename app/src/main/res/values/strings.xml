@@ -1,13 +1,16 @@
 <resources>
-    <string name="title_activity_score">ScoreActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="app_name">Exams</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="headline_records">Records Game</string>
+    <string name="record_btn_new_game">Play again</string>
+    <string name="headline_records_map">Map with record</string>
+    <string name="first_fragment_label">FirstFragment</string>
+    <string name="second_fragment_label">SecondFragment</string>
+    <string name="menu_SWBTN_speed">Speed : Low / High</string>
+    <string name="menu_SWBTN_control">Move control : Buttons / Motion</string>
+    <string name="menu_BTN_start">Start Playing</string>
+    <string name="menu_BTN_records">Records</string>
+    <string name="menu_hint_edit_TXT_name">Enter name to play</string>
+    <string name="game_LBL_score_atStart">0</string>
+
 </resources>

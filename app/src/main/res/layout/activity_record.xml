@@ -5,25 +5,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".View.RecordActivity"
-    android:padding="24dp"
+    android:backgroundTint="@color/purple_200"
     android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="@color/purple_500"
+        android:text="@string/headline_records" />
 
     <FrameLayout
         android:id="@+id/record_FRAME_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="20dp"
-        android:background="@color/purple_200"
-        />
+        android:layout_weight="1" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@color/purple_500"
+        android:text="@string/headline_records_map" />
 
     <FrameLayout
         android:id="@+id/record_FRAME_map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="20dp"
-        android:background="@color/purple_200"
-        />
+        android:layout_weight="1" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/record_BTN_newGame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/purple_200"
+        android:text="@string/record_btn_new_game"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

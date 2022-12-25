@@ -1,5 +1,7 @@
 package com.example.racegame.Model;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -7,10 +9,10 @@ import com.google.android.gms.maps.model.LatLng;
  * Racer build as Builder design pattern.
  */
 public class StudentRacer {
+
     private String name;
     private int score;
-    private int position;
-    private LatLng loseLocation;
+    private LatLng looseLocation;
 
     /**
      * empty Racer constructor
@@ -54,38 +56,26 @@ public class StudentRacer {
     }
 
     /**
-     * methode getPosition
-     * @return position-int , represent racer's current position on screen.
-     */
-    public int getPosition() {
-        return position;
-    }
-
-    /**
-     * setPosition methode
-     * @param position int, represent racer's current position on screen.
-     * @return this Racer
-     */
-    public StudentRacer setPosition(int position) {
-        this.position = position;
-        return this;
-    }
-
-    /**
      * getLoseLocation methode
-     * @return loseLocation-LatLng
+     * @return looseLocation-LatLng
      */
-    public LatLng getLoseLocation() {
-        return loseLocation;
+    public LatLng getLooseLocation() {
+        return looseLocation;
     }
 
     /**
      * setLoseLocation method
-     * @param loseLocation-LatLng
+     * @param looseLocation-LatLng
      * @return this Racer
      */
-    public StudentRacer setLoseLocation(LatLng loseLocation) {
-        this.loseLocation = loseLocation;
+    public StudentRacer setLooseLocation(LatLng looseLocation) {
+        this.looseLocation = looseLocation;
         return this;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "StudentRacer{" + "name='" + name + '\'' + ", score=" + score + ", loseLocation=" + looseLocation + '}';
     }
 }

@@ -1,10 +1,8 @@
 package com.example.racegame.Interfaces;
 
-public interface StepDetectorCallback {
+public interface OrientationDetectorCallback {
 
     void stepRight();
     void stepLeft();
-    void speedUp();
-    void speedDown();
 
 }

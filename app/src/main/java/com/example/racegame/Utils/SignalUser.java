@@ -1,16 +1,21 @@
 package com.example.racegame.Utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.widget.Toast;
 
+/**
+ *
+ */
 public class SignalUser {
+
+    @SuppressLint("StaticFieldLeak")
     private static SignalUser signalUser = null;
 
-    private Context context;
+    private final Context context;
     private static Vibrator vibrator;
 
     /**
@@ -26,13 +31,20 @@ public class SignalUser {
      * SignalUser using singleton design pattern.
      * and init Vibrator.
      * @param context
-     * @return notificationSignal
+     * @return
      */
-    public static SignalUser getInstance(Context context) {
+    public static void initInstance(Context context) {
         if (signalUser == null) {
             signalUser = new SignalUser(context);
             vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static SignalUser getInstance() {
         return signalUser;
     }
 
@@ -49,13 +61,15 @@ public class SignalUser {
      * @param vibrateTime in millisecond
      */
     public void vibrate(int vibrateTime) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            vibrator.vibrate(VibrationEffect.createOneShot(vibrateTime,
-                    VibrationEffect.DEFAULT_AMPLITUDE));
-        else
-            vibrator.vibrate(vibrateTime);
+        vibrator.vibrate(VibrationEffect.createOneShot(vibrateTime,
+                VibrationEffect.DEFAULT_AMPLITUDE));
     }
 
+    /**
+     * playSound method play sound
+     * @param context-Context
+     * @param soundID-int
+     */
     public void playSound(Context context, int soundID) {
         MediaPlayer player = MediaPlayer.create(context, soundID);
         player.setVolume(110, 110);
